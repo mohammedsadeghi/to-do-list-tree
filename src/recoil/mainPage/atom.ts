@@ -1,7 +1,7 @@
 import { atom } from "recoil";
-import { TreeItem } from "../../types/mainPageTypes";
+import { TreeType } from "../../types/mainPageTypes";
 
-export const treeValues = atom<TreeItem>({
+export const treeValues = atom<TreeType>({
   key: "treeValues",
-  default: { title: "", indent: 0, children: [], id: "" },
+  default: { title: "", children: [], id: "", parentId: "" },
 });

@@ -1,6 +1,7 @@
-export type TreeItem = {
+export type TreeType = {
   title: string;
-  indent: number;
-  children: TreeItem[];
+
+  children: TreeType[];
   id: string;
+  parentId: string;
 };
