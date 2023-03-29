@@ -1,6 +1,6 @@
-export type TreeItem = {
-  title: string;
-  indent: number;
-  children: TreeItem[];
+export interface TreeItem {
   id: string;
-};
+  title: string;
+  children: TreeItem[];
+  level?: number;
+}

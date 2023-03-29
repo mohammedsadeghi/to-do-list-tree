@@ -1,7 +1,20 @@
 import { atom } from "recoil";
 import { TreeItem } from "../../types/mainPageTypes";
 
-export const treeValues = atom<TreeItem>({
-  key: "treeValues",
-  default: { title: "", indent: 0, children: [], id: "" },
+export const treeState = atom<TreeItem[]>({
+  key: "treeState",
+  default: JSON.parse(localStorage.getItem("treeData") || "[]"),
+});
+
+export const focusedItemIdState = atom<string | null>({
+  key: "focusedItemIdState",
+  default: null,
+});
+export const expandedItemIdsState = atom<string[]>({
+  key: "expandedItemIdsState",
+  default: [],
+});
+export const editingItemIdState = atom<string | null>({
+  key: "editingItemIdState",
+  default: null,
 });
