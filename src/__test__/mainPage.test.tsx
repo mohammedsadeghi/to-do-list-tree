@@ -22,17 +22,17 @@ test("adds a new item when the add button is clicked", () => {
   renderMainPage();
   const addButton = screen.getByText("+");
   fireEvent.click(addButton);
-  const newItem = screen.getByText("New Item");
-  expect(newItem).toBeInTheDocument();
+  const treeInput = screen.getByTestId("tree-input");
+  expect(treeInput).toHaveValue("New Item");
 });
 
 test("adds a new item below the focused item when the Enter key is pressed", () => {
   renderMainPage();
   const addButton = screen.getByText("+");
   fireEvent.click(addButton);
-  const newItem = screen.getByText("New Item");
-  fireEvent.focus(newItem);
-  fireEvent.keyDown(newItem, { key: "Enter" });
-  const newItems = screen.getAllByText("New Item");
+  const treeInput = screen.getByTestId("tree-input");
+  fireEvent.focus(treeInput);
+  fireEvent.keyDown(treeInput, { key: "Enter" });
+  const newItems = screen.getAllByTestId("tree-input");
   expect(newItems.length).toBe(2);
 });

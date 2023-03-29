@@ -4,7 +4,6 @@ import {
   treeState,
   focusedItemIdState,
   expandedItemIdsState,
-  editingItemIdState,
 } from "../../recoil/mainPage/atom";
 import { TreeItem as TreeItemType } from "../../types/mainPageTypes";
 import useTreeItemKeyHandlers from "../../utils/useHandleKeyDown";
@@ -22,16 +21,11 @@ export const TreeItemInput: React.FC<TreeItemInputProps> = ({
 }) => {
   const [tree, setTree] = useRecoilState(treeState);
   const [focusedItemId, setFocusedItemId] = useRecoilState(focusedItemIdState);
-  const [isEditing, setIsEditing] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [expandedItemIds, setExpandedItemIds] =
     useRecoilState(expandedItemIdsState);
-  const [editingItemId] = useRecoilState(editingItemIdState);
-  useEffect(() => {
-    if (editingItemId === item.id) {
-      setIsEditing(true);
-    }
-  }, [editingItemId, item.id, setIsEditing]);
+
   useEffect(() => {
     if (focusedItemId === item.id && inputRef.current) {
       inputRef.current.focus();
@@ -43,26 +37,18 @@ export const TreeItemInput: React.FC<TreeItemInputProps> = ({
     setTree,
     focusedItemId,
     setFocusedItemId,
-    setIsEditing,
   });
 
   const handleClick = () => {
-    setFocusedItemId(item.id);
     if (expandedItemIds.includes(item.id)) {
       setExpandedItemIds(expandedItemIds.filter((id) => id !== item.id));
     } else {
       setExpandedItemIds([...expandedItemIds, item.id]);
     }
   };
-
-  const handleDoubleClick = () => {
-    setIsEditing(true);
+  const handleInputClick = () => {
+    setFocusedItemId(item.id);
   };
-
-  const handleBlur = () => {
-    setIsEditing(false);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const foundItem = findItem(tree, item.id);
     if (foundItem) {
@@ -76,26 +62,22 @@ export const TreeItemInput: React.FC<TreeItemInputProps> = ({
   };
 
   return (
-    <div
-      className="tree-item"
-      style={{ marginLeft: level * 20 }}
-      onClick={handleClick}
-    >
+    <div className="tree-item" style={{ marginLeft: level * 20 }}>
       <span
         className={
           item.children.length > 0
             ? "tree-item-circle"
             : "tree-item-circle-small"
         }
+        onClick={handleClick}
       ></span>
       <input
         ref={inputRef}
         value={item.title}
-        readOnly={!isEditing}
         onKeyDown={handleKeyDown}
-        onDoubleClick={handleDoubleClick}
-        onBlur={handleBlur}
         onChange={handleChange}
+        onFocus={handleInputClick}
+        data-testid="tree-input"
       />
     </div>
   );

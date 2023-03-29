@@ -94,3 +94,11 @@ input {
   background-color: var(--tree-item-circle-color-small);
   margin-right: 8px;
 }
+input {
+  border: none;
+  width: 100%;
+}
+input:focus {
+  border: none;
+  outline: none;
+}
