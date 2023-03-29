@@ -62,26 +62,21 @@ export function insertAsChildForTab(
   siblingId: string,
   item: TreeItemType
 ): TreeItemType[] {
-  const index = tree.findIndex((item) => item.id === siblingId);
-  if (index !== -1) {
-    let newTree = [...tree];
-    console.log("push", item, newTree);
+  const index = tree.findIndex((mapItem) => mapItem.id === siblingId);
 
-    return [
-      ...newTree,
-      { ...newTree[index], children: [...newTree[index].children, item] },
-    ];
+  if (index !== -1) {
+    return [{ ...tree[index], children: [...tree[index].children, item] }];
   }
 
-  return tree.map((item) => {
-    if (item.children.length > 0) {
+  return tree.map((mapItem) => {
+    if (mapItem.children.length > 0) {
       const updatedChildren = insertAsChildForTab(
-        item.children,
+        mapItem.children,
         siblingId,
         item
       );
-      return { ...item, children: updatedChildren };
+      return { ...mapItem, children: updatedChildren };
     }
-    return item;
+    return mapItem;
   });
 }

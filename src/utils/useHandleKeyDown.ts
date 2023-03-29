@@ -36,7 +36,7 @@ const useTreeItemKeyHandlers = ({
         e.preventDefault();
         const focusedItemIndex = tree.findIndex((t) => t.id === focusedItemId);
         const prevItem = findPrevoiusItem(tree, item.id);
-        console.log("here", { focusedItemId, prevItem });
+
         if (focusedItemIndex > 0) {
           const prevItem = tree[focusedItemIndex - 1];
           const focusedItem = tree[focusedItemIndex];
@@ -52,14 +52,14 @@ const useTreeItemKeyHandlers = ({
           localStorage.setItem("treeData", JSON.stringify(updatedTree));
           setFocusedItemId(focusedItem.id);
         } else if (prevItem?.prevItem) {
-          console.log("here");
-
           const deletedNodeTree = deleteItem(tree, item.id);
+
           const newTree = insertAsChildForTab(
             deletedNodeTree,
             prevItem.prevItem.id,
             item
           );
+
           setTree(newTree);
           localStorage.setItem("treeData", JSON.stringify(newTree));
           setFocusedItemId(item.id);
