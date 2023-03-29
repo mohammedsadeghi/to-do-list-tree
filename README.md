@@ -1,46 +1,87 @@
-# Getting Started with Create React App
+# Project Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This project is a React based web application that implements a tree-like structure for organizing items. Users can add, delete, and edit items within the tree, as well as change the item hierarchy through various key bindings. The application leverages Recoil for state management.
 
-In the project directory, you can run:
+## File Structure
 
-### `npm start`
+The project is organized into the following main files and components:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- `App.tsx`: The main entry point for the application, which includes the Recoil root.
+- `MainPage.tsx`: The main page component that renders the tree structure and handles adding new items.
+- `TreeItem.tsx`: A recursive component responsible for rendering individual items in the tree, along with their respective children.
+- `TreeItemInput.tsx`: Input component that allows editing of item titles and handles related key events.
+- `TreeItemChildren.tsx`: A component for rendering the children of a particular item.
+- Helper functions:
+  - `findItem.ts`: Functions to find specific items within the tree based on their IDs.
+  - `findParent.ts`: Function to find the parent of a given item in the tree.
+  - `insertNewItem.ts`: Functions for inserting new items into the tree as siblings or children.
+  - `deleteItem.ts`: Function to remove an item from the tree.
+  - `updateTreeWithNewArray.ts`: Function to update the tree with a given array of items.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Main Components
 
-### `npm test`
+### App
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The `App` component wraps the `MainPage` component in a `RecoilRoot` to enable state management within the application.
 
-### `npm run build`
+### MainPage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The main page component is responsible for rendering the tree structure and handling the insertion of new items. It listens for "Enter" key events to insert a new item as a sibling of the current focused item.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && focusedItemId) {
+    e.preventDefault();
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    if (focusedItemId) {
+      const newItem: TreeItemType = {
+        id: uuidv4(),
+        title: "New Item",
+        children: [],
+      };
+      console.log({ focusedItemId });
 
-### `npm run eject`
+      const newTree = insertAsSibling(tree, focusedItemId, newItem);
+      setTree(newTree);
+      localStorage.setItem("treeData", JSON.stringify(newTree));
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+      setTimeout(() => {
+        setFocusedItemId(newItem.id);
+      }, 0);
+    }
+    }
+    }
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### TreeItem
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The `TreeItem` component is a recursive component responsible for rendering individual items in the tree and their children.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### TreeItemInput
 
-## Learn More
+The `TreeItemInput` component is responsible for handling item title editing and related key events. It listens for "Enter", "Tab", "Shift + Tab", and "Ctrl + Shift + Delete" key events to perform various actions such as updating the item, moving items, and deleting items.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Helper Functions
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The project includes several helper functions to facilitate tree manipulation including:
+
+- `findItem`: Functions to find specific items within the tree based on their IDs.
+- `findParent`: Function to find the parent of a given item in the tree.
+- `insertNewItem`: Functions for inserting new items into the tree as siblings or children.
+- `deleteItem`: Function to remove an item from the tree.
+- `updateTreeWithNewArray`: Function to update the tree with a given array of items.
+
+## Usage
+
+In order to use the application, the user can interact with the tree by adding, editing or removing items through key bindings. These are the main actions that can be performed within the tree:
+
+- Press "Enter" to insert a new item as a sibling to the currently focused item.
+- Press "Tab" to move the focused item as a child of the previous item.
+- Press "Shift+Tab" to move the focused item as a sibling before its parent.
+- Press "Ctrl+Shift+Delete" to delete the focused item.
+
+The application's state is persisted in the browser's `localStorage` for persistence across page reloads.
+
+## Conclusion
+
+This project provides a simple and user-friendly interface for organizing items in a tree-like structure. By leveraging Recoil for state management, the application ensures efficient updates to the tree and encapsulates item manipulation logic in helper functions.
