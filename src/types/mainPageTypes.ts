@@ -1,7 +1,6 @@
-export type TreeType = {
-  title: string;
-
-  children: TreeType[];
+export interface TreeItem {
   id: string;
-  parentId: string;
-};
+  title: string;
+  children: TreeItem[];
+  level?: number;
+}
