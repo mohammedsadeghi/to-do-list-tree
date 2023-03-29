@@ -15,7 +15,6 @@ interface UseTreeItemKeyHandlersProps {
   setTree: (tree: TreeItemType[]) => void;
   focusedItemId: string | null;
   setFocusedItemId: (itemId: string | null) => void;
-  setIsEditing: (editing: boolean) => void;
 }
 
 const useTreeItemKeyHandlers = ({
@@ -24,13 +23,12 @@ const useTreeItemKeyHandlers = ({
   setTree,
   focusedItemId,
   setFocusedItemId,
-  setIsEditing,
 }: UseTreeItemKeyHandlersProps) => {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        setIsEditing(false);
+
         setFocusedItemId(item.id);
       } else if (e.key === "Tab") {
         e.preventDefault();
@@ -94,7 +92,7 @@ const useTreeItemKeyHandlers = ({
         localStorage.setItem("treeData", JSON.stringify(newTree));
       }
     },
-    [setIsEditing, setFocusedItemId, item, tree, focusedItemId, setTree]
+    [setFocusedItemId, item, tree, focusedItemId, setTree]
   );
 
   return handleKeyDown;

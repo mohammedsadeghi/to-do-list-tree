@@ -14,7 +14,3 @@ export const expandedItemIdsState = atom<string[]>({
   key: "expandedItemIdsState",
   default: [],
 });
-export const editingItemIdState = atom<string | null>({
-  key: "editingItemIdState",
-  default: null,
-});
